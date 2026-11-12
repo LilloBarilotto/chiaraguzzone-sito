@@ -1,4 +1,4 @@
-Ciao, sono Chiara. Sono una psicologa e una consulente sessuale e ricevo a Milano e online.
+Sono la dott.ssa Chiara Guzzone. Sono una psicologa e una consulente sessuale e ricevo a Milano e online.
 
 Ho scelto questo lavoro perché credo che ognuno di noi abbia una storia da raccontare e dei significati propri con cui legge ciò che vive. A volte quei significati ci sostengono, altre volte ci intrappolano. Il mio compito non è dirti chi sei o cosa dovresti fare, ma accompagnarti a capire meglio la tua esperienza, con rispetto e senza giudizio.
 
