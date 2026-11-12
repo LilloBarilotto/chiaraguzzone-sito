@@ -14,6 +14,7 @@ const temi = (await getCollection('temi', (e) => !e.data.draft)).sort((a, b) => 
   jsonLd={breadcrumbLd([{ name: 'Home', path: '/' }, { name: 'Di cosa mi occupo', path: '/di-cosa-mi-occupo' }])}
 >
   <Section title="Di cosa mi occupo" intro="Alcune delle situazioni con cui le persone mi contattano più spesso.">
+    {temi.length === 0 && <p>Al momento non ci sono temi pubblicati: scrivimi per avere informazioni.</p>}
     <div class="grid grid--3">
       {temi.map((t) => (
         <Card title={t.data.title} href={`/di-cosa-mi-occupo/${t.id}`}>{t.data.excerpt}</Card>

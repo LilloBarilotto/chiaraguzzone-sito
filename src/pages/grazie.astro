@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/Button.astro';
+import { hasWhatsapp } from '../data/site';
 ---
 <BaseLayout title="Grazie | Psicologa Milano – Chiara Guzzone" description="Grazie per il tuo messaggio: ti risponderò appena possibile." noindex>
   <section class="section">
@@ -8,7 +9,7 @@ import Button from '../components/Button.astro';
       <p class="eyebrow">Messaggio inviato</p>
       <h1>Grazie per avermi scritto</h1>
       <p class="lead">Ho ricevuto la tua richiesta e ti risponderò entro circa 48 ore, con il canale che hai scelto.</p>
-      <p>Se hai urgenza puoi anche scrivermi direttamente su WhatsApp dalla pagina contatti.</p>
+      {hasWhatsapp && <p>Se hai urgenza puoi anche scrivermi direttamente su WhatsApp dalla pagina contatti.</p>}
       <p><Button href="/">Torna alla home</Button> <Button href="/blog" variant="secondary">Leggi il blog</Button></p>
     </div>
   </section>

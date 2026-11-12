@@ -8,8 +8,12 @@
   "phoneHref": "tel:+393500897658",
   "whatsapp": "393500897658",
   "whatsappText": "Ciao Chiara, vorrei avere informazioni per un primo colloquio.",
+  "showWhatsapp": true,
   "email": "guzzone.chiara@gmail.com",
-  "instagram": { "handle": "", "url": "" },
+  "instagram": {
+    "handle": "",
+    "url": ""
+  },
   "piva": "13302830966",
   "studios": [
     {
@@ -21,7 +25,8 @@
       "postalCode": "20127",
       "note": "MM1 Pasteur / Rovereto",
       "lat": 45.49388,
-      "lng": 9.21669
+      "lng": 9.21669,
+      "show": true
     },
     {
       "id": "carducci",
@@ -32,7 +37,8 @@
       "postalCode": "20123",
       "note": "MM1/MM2 Cadorna · MM2 Sant'Ambrogio",
       "lat": 45.4629,
-      "lng": 9.17409
+      "lng": 9.17409,
+      "show": true
     }
   ],
   "online": true

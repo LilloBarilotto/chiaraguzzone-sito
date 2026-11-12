@@ -8,20 +8,34 @@ import WhatsAppButton from '../components/WhatsAppButton.astro';
 import Portrait from '../components/Portrait.astro';
 import StudioMap from '../components/StudioMap.astro';
 import FaqList from '../components/FaqList.astro';
-import home from '../data/home.json';
+import { home, mostra } from '../lib/home';
 import { site } from '../data/site';
 import { professionalServiceLd, faqLd, plain, formatDate, OG_DEFAULT } from '../lib/seo';
 
 const temi = (await getCollection('temi', (e) => !e.data.draft)).sort((a, b) => a.data.order - b.data.order);
 const servizi = (await getCollection('servizi', (e) => !e.data.draft)).sort((a, b) => a.data.order - b.data.order);
-const faqs = (await getCollection('faq', (e) => e.data.showOnHome)).sort((a, b) => a.data.order - b.data.order);
+const faqs = (await getCollection('faq', (e) => e.data.showOnHome && !e.data.draft)).sort((a, b) => a.data.order - b.data.order);
 const posts = (await getCollection('blog', (e) => !e.data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3);
 
+// Una sezione si vede se il suo interruttore è acceso e ha qualcosa da mostrare.
+const vedi = {
+  riconosci: mostra(home.riconosci) && home.riconosci.items.length > 0,
+  temi: mostra(home.temi) && temi.length > 0,
+  servizi: mostra(home.servizi) && servizi.length > 0,
+  approccio: mostra(home.approccio),
+  chiSono: mostra(home.chiSonoTeaser),
+  studi: mostra(home.studi),
+  faq: mostra(home.faq) && faqs.length > 0,
+  blog: mostra(home.blog) && posts.length > 0,
+  ctaFinale: mostra(home.ctaFinale),
+};
+
 const jsonLd = [
   professionalServiceLd(temi.map((t) => t.data.title)),
-  ...(faqs.length ? [faqLd(faqs.map((f) => ({ q: f.data.question, a: plain(f.body) })))] : []),
+  // Le FAQ si dichiarano a Google solo se si vedono nella pagina.
+  ...(vedi.faq ? [faqLd(faqs.map((f) => ({ q: f.data.question, a: plain(f.body) })))] : []),
 ];
 ---
 <BaseLayout
@@ -48,70 +62,82 @@ const jsonLd = [
     </div>
   </section>
 
-  <Section id="riconosci" title={home.riconosci.title} intro={home.riconosci.intro} variant="alt">
-    <ul class="riconosci">
-      {home.riconosci.items.map((item) => <li>{item}</li>)}
-    </ul>
-  </Section>
+  {vedi.riconosci && (
+    <Section id="riconosci" title={home.riconosci.title} intro={home.riconosci.intro} variant="alt">
+      <ul class="riconosci">
+        {home.riconosci.items.map((item) => <li>{item}</li>)}
+      </ul>
+    </Section>
+  )}
 
-  <Section id="temi" title="Di cosa mi occupo">
-    <div class="grid grid--3">
-      {temi.map((t) => (
-        <Card title={t.data.title} href={`/di-cosa-mi-occupo/${t.id}`}>{t.data.excerpt}</Card>
-      ))}
-    </div>
-  </Section>
-
-  <Section id="servizi" title="Come posso aiutarti" variant="sage">
-    <div class="grid grid--3">
-      {servizi.map((s) => (
-        <Card title={s.data.title} href={`/servizi/${s.id}`} tag={s.data.forWhom}>{s.data.excerpt}</Card>
-      ))}
-    </div>
-  </Section>
-
-  <Section id="approccio" title={home.approccio.title} intro={home.approccio.intro} variant="alt">
-    <div class="approccio">
-      <div class="main-approach">
-        <h3>{home.approccio.costruttivista.title}</h3>
-        <p>{home.approccio.costruttivista.text}</p>
+  {vedi.temi && (
+    <Section id="temi" title="Di cosa mi occupo">
+      <div class="grid grid--3">
+        {temi.map((t) => (
+          <Card title={t.data.title} href={`/di-cosa-mi-occupo/${t.id}`}>{t.data.excerpt}</Card>
+        ))}
       </div>
-      <div class="second-approach">
-        <h3>{home.approccio.cbt.title}</h3>
-        <p>{home.approccio.cbt.text}</p>
+    </Section>
+  )}
+
+  {vedi.servizi && (
+    <Section id="servizi" title="Come posso aiutarti" variant="sage">
+      <div class="grid grid--3">
+        {servizi.map((s) => (
+          <Card title={s.data.title} href={`/servizi/${s.id}`} tag={s.data.forWhom}>{s.data.excerpt}</Card>
+        ))}
       </div>
-    </div>
-    <ol class="passi">
-      {home.approccio.passi.map((p) => (
-        <li><h3>{p.title}</h3><p>{p.text}</p></li>
-      ))}
-    </ol>
-  </Section>
+    </Section>
+  )}
 
-  <Section id="chi-sono" variant="alt">
-    <div class="teaser">
-      <Portrait ratio="1 / 1" class="teaser-photo" sizes="16rem" />
-      <div class="stack">
-        <h2>{home.chiSonoTeaser.title}</h2>
-        <p>{home.chiSonoTeaser.text}</p>
-        <p class="muted">{site.albo}</p>
-        <Button href="/chi-sono" variant="secondary">Scopri di più su di me</Button>
+  {vedi.approccio && (
+    <Section id="approccio" title={home.approccio.title} intro={home.approccio.intro} variant="alt">
+      <div class="approccio">
+        <div class="main-approach">
+          <h3>{home.approccio.costruttivista.title}</h3>
+          <p>{home.approccio.costruttivista.text}</p>
+        </div>
+        <div class="second-approach">
+          <h3>{home.approccio.cbt.title}</h3>
+          <p>{home.approccio.cbt.text}</p>
+        </div>
       </div>
-    </div>
-  </Section>
+      <ol class="passi">
+        {home.approccio.passi.map((p) => (
+          <li><h3>{p.title}</h3><p>{p.text}</p></li>
+        ))}
+      </ol>
+    </Section>
+  )}
 
-  <Section id="studi" title={home.studi.title} intro={home.studi.intro}>
-    <StudioMap />
-  </Section>
+  {vedi.chiSono && (
+    <Section id="chi-sono" variant="alt">
+      <div class="teaser">
+        <Portrait ratio="1 / 1" class="teaser-photo" sizes="16rem" />
+        <div class="stack">
+          <h2>{home.chiSonoTeaser.title}</h2>
+          <p>{home.chiSonoTeaser.text}</p>
+          <p class="muted">{site.albo}</p>
+          <Button href="/chi-sono" variant="secondary">Scopri di più su di me</Button>
+        </div>
+      </div>
+    </Section>
+  )}
 
-  {faqs.length > 0 && (
+  {vedi.studi && (
+    <Section id="studi" title={home.studi.title} intro={home.studi.intro}>
+      <StudioMap />
+    </Section>
+  )}
+
+  {vedi.faq && (
     <Section id="faq" title={home.faq.title} variant="alt">
       <FaqList items={faqs} />
       <p style="margin-top: var(--space-5)"><a href="/faq">Tutte le domande frequenti →</a></p>
     </Section>
   )}
 
-  {posts.length > 0 && (
+  {vedi.blog && (
     <Section id="blog" title={home.blog.title}>
       <div class="grid grid--3">
         {posts.map((p) => (
@@ -122,16 +148,18 @@ const jsonLd = [
     </Section>
   )}
 
-  <Section id="contatto" variant="sage" narrow>
-    <div class="final stack">
-      <h2>{home.ctaFinale.title}</h2>
-      <p class="lead">{home.ctaFinale.text}</p>
-      <div class="cta-row">
-        <Button href="/contatti">{home.ctaFinale.button}</Button>
-        <WhatsAppButton />
+  {vedi.ctaFinale && (
+    <Section id="contatto" variant="sage" narrow>
+      <div class="final stack">
+        <h2>{home.ctaFinale.title}</h2>
+        <p class="lead">{home.ctaFinale.text}</p>
+        <div class="cta-row">
+          <Button href="/contatti">{home.ctaFinale.button}</Button>
+          <WhatsAppButton />
+        </div>
       </div>
-    </div>
-  </Section>
+    </Section>
+  )}
 </BaseLayout>
 
 <style>

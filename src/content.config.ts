@@ -48,6 +48,7 @@ const faq = defineCollection({
     question: z.string(),
     order: z.number(),
     showOnHome: z.boolean().default(false),
+    draft: z.boolean().default(false),
   }),
 });
 

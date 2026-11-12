@@ -14,6 +14,7 @@ const servizi = (await getCollection('servizi', (e) => !e.data.draft)).sort((a, 
   jsonLd={breadcrumbLd([{ name: 'Home', path: '/' }, { name: 'Servizi', path: '/servizi' }])}
 >
   <Section title="Servizi" intro="Percorsi in studio a Milano o online, per adolescenti, giovani, adulti e coppie.">
+    {servizi.length === 0 && <p>Al momento non ci sono servizi pubblicati: scrivimi per avere informazioni.</p>}
     <div class="grid grid--3">
       {servizi.map((s) => (
         <Card title={s.data.title} href={`/servizi/${s.id}`} tag={s.data.forWhom}>{s.data.excerpt}</Card>

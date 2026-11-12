@@ -1,5 +1,5 @@
 ---
-import { site, whatsappUrl } from '../data/site';
+import { site, whatsappUrl, hasWhatsapp } from '../data/site';
 const year = new Date().getFullYear();
 const hasInstagram = Boolean(site.instagram.url);
 ---
@@ -30,7 +30,7 @@ const hasInstagram = Boolean(site.instagram.url);
         <ul class="plain">
           <li><a href={site.phoneHref}>{site.phone}</a></li>
           <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
-          <li><a href={whatsappUrl()} target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+          {hasWhatsapp && <li><a href={whatsappUrl()} target="_blank" rel="noopener noreferrer">WhatsApp</a></li>}
           {hasInstagram && <li><a href={site.instagram.url} rel="noopener noreferrer">Instagram {site.instagram.handle}</a></li>}
         </ul>
       </div>

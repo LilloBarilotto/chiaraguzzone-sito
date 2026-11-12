@@ -7,6 +7,7 @@
     "ctaSecondary": "Scrivimi su WhatsApp"
   },
   "riconosci": {
+    "show": true,
     "title": "Ti riconosci?",
     "intro": "Non serve stare male \"abbastanza\" per chiedere aiuto. A volte basta sentire che qualcosa non torna.",
     "items": [
@@ -18,7 +19,14 @@
       "Stai attraversando un cambiamento e hai bisogno di fare ordine."
     ]
   },
+  "temi": {
+    "show": true
+  },
+  "servizi": {
+    "show": true
+  },
   "approccio": {
+    "show": true,
     "title": "Come lavoro",
     "intro": "Il percorso si costruisce insieme, al tuo ritmo e senza giudizio.",
     "costruttivista": {
@@ -30,22 +38,40 @@
       "text": "Accanto a questo, uso strumenti cognitivo-comportamentali: strategie concrete ed esercizi da provare tra un incontro e l'altro, scelti insieme a te."
     },
     "passi": [
-      { "title": "Mi contatti", "text": "Compili il modulo, mi scrivi o mi chiami. Ti rispondo e troviamo un momento." },
-      { "title": "Primo colloquio", "text": "Mi racconti cosa ti porta qui. Io ti spiego come lavoro. Nessun obbligo di proseguire." },
-      { "title": "Il percorso", "text": "Se vuoi continuare, definiamo insieme obiettivi e ritmo degli incontri, in studio o online." }
+      {
+        "title": "Mi contatti",
+        "text": "Compili il modulo, mi scrivi o mi chiami. Ti rispondo e troviamo un momento."
+      },
+      {
+        "title": "Primo colloquio",
+        "text": "Mi racconti cosa ti porta qui. Io ti spiego come lavoro. Nessun obbligo di proseguire."
+      },
+      {
+        "title": "Il percorso",
+        "text": "Se vuoi continuare, definiamo insieme obiettivi e ritmo degli incontri, in studio o online."
+      }
     ]
   },
   "chiSonoTeaser": {
+    "show": true,
     "title": "Sono Chiara",
     "text": "Sono psicologa e consulente sessuale. Credo che ognuno abbia una storia e dei significati propri: il mio lavoro è aiutarti a capirli, con ascolto e rispetto."
   },
   "studi": {
+    "show": true,
     "title": "Dove ricevo",
     "intro": "A Milano, vicino a Pasteur e Rovereto (zona NoLo e Turro), oppure online da dove preferisci."
   },
-  "faq": { "title": "Domande frequenti" },
-  "blog": { "title": "Dal blog" },
+  "faq": {
+    "show": true,
+    "title": "Domande frequenti"
+  },
+  "blog": {
+    "show": true,
+    "title": "Dal blog"
+  },
   "ctaFinale": {
+    "show": true,
     "title": "Se senti che è il momento, iniziamo da qui",
     "text": "Un primo colloquio è un incontro per conoscerci, senza impegno. Scrivimi e ti rispondo.",
     "button": "Richiedi un primo colloquio"

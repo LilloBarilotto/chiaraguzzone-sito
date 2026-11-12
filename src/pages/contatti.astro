@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/Section.astro';
 import WhatsAppButton from '../components/WhatsAppButton.astro';
 import StudioMap from '../components/StudioMap.astro';
-import { site } from '../data/site';
+import { site, hasWhatsapp } from '../data/site';
 import { pageTitle, breadcrumbLd, OG_DEFAULT } from '../lib/seo';
 import { IS_ANTEPRIMA } from '../lib/ambiente';
 
@@ -12,7 +12,7 @@ const netlifyForm = IS_ANTEPRIMA ? {} : { 'data-netlify': 'true', 'netlify-honey
 ---
 <BaseLayout
   title={pageTitle('Contatti')}
-  description="Contatta la psicologa Chiara Guzzone per un primo colloquio a Milano (Pasteur, Carducci) o online: telefono, WhatsApp, email o modulo di richiesta."
+  description={`Contatta la psicologa Chiara Guzzone per un primo colloquio a Milano (Pasteur${site.studios.length > 1 ? ', Carducci' : ''}) o online: telefono, ${hasWhatsapp ? 'WhatsApp, ' : ''}email o modulo di richiesta.`}
   ogImage={OG_DEFAULT}
   jsonLd={breadcrumbLd([{ name: 'Home', path: '/' }, { name: 'Contatti', path: '/contatti' }])}
 >
@@ -48,16 +48,15 @@ const netlifyForm = IS_ANTEPRIMA ? {} : { 'data-netlify': 'true', 'netlify-honey
           <label for="studio">Studio preferito</label>
           <select id="studio" name="studio">
             <option>Indifferente</option>
-            <option>Studio Venini – Pasteur</option>
-            <option>Studio Carducci</option>
-            <option>Online</option>
+            {site.studios.map((s) => <option>{s.name}</option>)}
+            {site.online && <option>Online</option>}
           </select>
         </div>
         <fieldset>
           <legend>Come preferisci essere ricontattato/a?</legend>
           <label class="opt"><input type="radio" name="ricontatto" value="email" checked /> Email</label>
           <label class="opt"><input type="radio" name="ricontatto" value="telefono" /> Telefono</label>
-          <label class="opt"><input type="radio" name="ricontatto" value="WhatsApp" /> WhatsApp</label>
+          {hasWhatsapp && <label class="opt"><input type="radio" name="ricontatto" value="WhatsApp" /> WhatsApp</label>}
         </fieldset>
         <div>
           <label for="messaggio">Messaggio <span class="muted">(facoltativo)</span></label>

@@ -132,6 +132,7 @@ collections:
       - { name: question, label: Domanda, widget: string }
       - { name: order, label: Posizione nell'elenco, widget: number, value_type: int, min: 1, default: 1 }
       - { name: showOnHome, label: Mostra anche nella Home, widget: boolean, default: false }
+      - { name: draft, label: Bozza (non pubblicare), widget: boolean, default: false, hint: "Attivo = la domanda non compare da nessuna parte (né nella pagina FAQ né nella Home)." }
       - { name: body, label: Risposta, widget: markdown }
 
   # ---------------------------------------------------------------- IMPOSTAZIONI
@@ -152,6 +153,7 @@ collections:
           - { name: phoneHref, label: Telefono (link), widget: string, hint: "Formato tel:+39xxxxxxxxxx, senza spazi." }
           - { name: whatsapp, label: Numero WhatsApp, widget: string, hint: "Solo cifre con prefisso, senza + e spazi. Es. 393500897658" }
           - { name: whatsappText, label: Messaggio WhatsApp precompilato, widget: text }
+          - { name: showWhatsapp, label: Mostra WhatsApp, widget: boolean, default: true, hint: "Spento = spariscono tutti i bottoni e i link WhatsApp del sito." }
           - { name: email, label: Email, widget: string }
           - name: instagram
             label: Instagram
@@ -175,6 +177,7 @@ collections:
               - { name: note, label: Come arrivare, widget: string, hint: "Es. MM1 Pasteur / Rovereto" }
               - { name: lat, label: Latitudine, widget: number, value_type: float, hint: "Es. 45.4935. Serve per la mappa: chiedi aiuto prima di cambiarla." }
               - { name: lng, label: Longitudine, widget: number, value_type: float, hint: "Es. 9.2195." }
+              - { name: show, label: Mostra questo studio, widget: boolean, default: true, hint: "Spento = lo studio sparisce da mappa, contatti, footer e modulo. Lo studio principale si vede sempre." }
           - { name: online, label: Colloqui online disponibili, widget: boolean, default: true }
 
       - name: home
@@ -195,13 +198,25 @@ collections:
             label: Ti riconosci?
             widget: object
             fields:
+              - { name: show, label: Mostra questa sezione, widget: boolean, default: true, hint: "Spento = la sezione non compare nella Home (i testi restano salvati)." }
               - { name: title, label: Titolo, widget: string }
               - { name: intro, label: Introduzione, widget: text }
               - { name: items, label: Elenco, widget: list, field: { name: item, label: Voce, widget: string } }
+          - name: temi
+            label: Sezione "Di cosa mi occupo"
+            widget: object
+            fields:
+              - { name: show, label: Mostra questa sezione, widget: boolean, default: true, hint: "Spento = la sezione non compare nella Home (i testi restano salvati)." }
+          - name: servizi
+            label: Sezione "Come posso aiutarti" (servizi)
+            widget: object
+            fields:
+              - { name: show, label: Mostra questa sezione, widget: boolean, default: true, hint: "Spento = la sezione non compare nella Home (i testi restano salvati)." }
           - name: approccio
             label: Il mio approccio
             widget: object
             fields:
+              - { name: show, label: Mostra questa sezione, widget: boolean, default: true, hint: "Spento = la sezione non compare nella Home (i testi restano salvati)." }
               - { name: title, label: Titolo, widget: string }
               - { name: intro, label: Introduzione, widget: text }
               - name: costruttivista
@@ -228,28 +243,33 @@ collections:
             label: Anteprima "Chi sono"
             widget: object
             fields:
+              - { name: show, label: Mostra questa sezione, widget: boolean, default: true, hint: "Spento = la sezione non compare nella Home (i testi restano salvati)." }
               - { name: title, label: Titolo, widget: string }
               - { name: text, label: Testo, widget: text }
           - name: studi
             label: Sezione studi
             widget: object
             fields:
+              - { name: show, label: Mostra questa sezione, widget: boolean, default: true, hint: "Spento = la sezione non compare nella Home (i testi restano salvati)." }
               - { name: title, label: Titolo, widget: string }
               - { name: intro, label: Introduzione, widget: text }
           - name: faq
             label: Sezione domande frequenti
             widget: object
             fields:
+              - { name: show, label: Mostra questa sezione, widget: boolean, default: true, hint: "Spento = la sezione non compare nella Home (i testi restano salvati)." }
               - { name: title, label: Titolo, widget: string }
           - name: blog
             label: Sezione blog
             widget: object
             fields:
+              - { name: show, label: Mostra questa sezione, widget: boolean, default: true, hint: "Spento = la sezione non compare nella Home (i testi restano salvati)." }
               - { name: title, label: Titolo, widget: string }
           - name: ctaFinale
             label: Invito finale
             widget: object
             fields:
+              - { name: show, label: Mostra questa sezione, widget: boolean, default: true, hint: "Spento = la sezione non compare nella Home (i testi restano salvati)." }
               - { name: title, label: Titolo, widget: string }
               - { name: text, label: Testo, widget: text }
               - { name: button, label: Testo del pulsante, widget: string }
