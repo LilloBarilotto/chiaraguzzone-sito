@@ -1,0 +1,30 @@
+---
+import { Picture } from 'astro:assets';
+import portrait from '../assets/chiara-guzzone-ritratto.jpg';
+
+interface Props {
+  /** Rapporto d'aspetto CSS, es. "4 / 5" */
+  ratio?: string;
+  sizes?: string;
+  loading?: 'eager' | 'lazy';
+  class?: string;
+}
+const { ratio = '4 / 5', sizes = '(min-width: 56rem) 40vw, 100vw', loading = 'lazy', class: className = '' } = Astro.props;
+---
+<div class:list={['portrait', className]} style={`aspect-ratio: ${ratio}`}>
+  <Picture
+    src={portrait}
+    alt="Ritratto della dottoressa Chiara Guzzone, psicologa a Milano"
+    formats={['avif', 'webp']}
+    fallbackFormat="jpg"
+    widths={[480, 720, 960]}
+    sizes={sizes}
+    loading={loading}
+    decoding="async"
+  />
+</div>
+<style>
+  .portrait { width: 100%; overflow: hidden; background: var(--color-bg-alt); border-radius: var(--radius-lg); }
+  .portrait :global(picture), .portrait :global(img) { display: block; width: 100%; height: 100%; }
+  .portrait :global(img) { object-fit: cover; object-position: 50% 30%; }
+</style>

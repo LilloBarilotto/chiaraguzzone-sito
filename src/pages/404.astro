@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+---
+<BaseLayout title="Pagina non trovata | Psicologa Milano – Chiara Guzzone" description="La pagina che cerchi non esiste o è stata spostata." noindex>
+  <section class="section">
+    <div class="container container--narrow stack">
+      <p class="eyebrow">Errore 404</p>
+      <h1>Questa pagina non esiste</h1>
+      <p class="lead">Forse il link è cambiato o contiene un errore. Puoi tornare alla home o scrivermi.</p>
+      <p><Button href="/">Torna alla home</Button> <Button href="/contatti" variant="secondary">Contatti</Button></p>
+    </div>
+  </section>
+</BaseLayout>

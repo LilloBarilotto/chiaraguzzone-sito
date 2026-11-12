@@ -1,0 +1,53 @@
+{
+  "hero": {
+    "heading": "Psicologa a Milano e online",
+    "title": "Uno spazio per capire cosa stai vivendo, al tuo ritmo.",
+    "subtitle": "Sostegno psicologico per adolescenti, giovani, adulti e coppie. Ansia, autostima, relazioni, sessualità e affettività.",
+    "ctaPrimary": "Richiedi un primo colloquio",
+    "ctaSecondary": "Scrivimi su WhatsApp"
+  },
+  "riconosci": {
+    "title": "Ti riconosci?",
+    "intro": "Non serve stare male \"abbastanza\" per chiedere aiuto. A volte basta sentire che qualcosa non torna.",
+    "items": [
+      "La mente non si ferma mai e l'ansia ti accompagna ogni giorno.",
+      "Sei molto duro/a con te stesso/a e fai fatica a sentirti all'altezza.",
+      "Nelle relazioni ripeti sempre gli stessi nodi.",
+      "Nella coppia non riuscite più a parlarvi davvero.",
+      "Hai domande o disagio sulla sessualità e non sai con chi parlarne.",
+      "Stai attraversando un cambiamento e hai bisogno di fare ordine."
+    ]
+  },
+  "approccio": {
+    "title": "Come lavoro",
+    "intro": "Il percorso si costruisce insieme, al tuo ritmo e senza giudizio.",
+    "costruttivista": {
+      "title": "Dare senso alla tua esperienza",
+      "text": "Il mio riferimento è l'approccio cognitivo costruttivista: esploriamo i significati che dai a ciò che vivi, le idee su di te e sugli altri. Tu sei la persona che costruisce il proprio modo di vedere il mondo; io ti accompagno."
+    },
+    "cbt": {
+      "title": "Strumenti pratici, quando servono",
+      "text": "Accanto a questo, uso strumenti cognitivo-comportamentali: strategie concrete ed esercizi da provare tra un incontro e l'altro, scelti insieme a te."
+    },
+    "passi": [
+      { "title": "Mi contatti", "text": "Compili il modulo, mi scrivi o mi chiami. Ti rispondo e troviamo un momento." },
+      { "title": "Primo colloquio", "text": "Mi racconti cosa ti porta qui. Io ti spiego come lavoro. Nessun obbligo di proseguire." },
+      { "title": "Il percorso", "text": "Se vuoi continuare, definiamo insieme obiettivi e ritmo degli incontri, in studio o online." }
+    ]
+  },
+  "chiSonoTeaser": {
+    "title": "Sono Chiara",
+    "text": "Sono psicologa e consulente sessuale. Credo che ognuno abbia una storia e dei significati propri: il mio lavoro è aiutarti a capirli, con ascolto e rispetto."
+  },
+  "studi": {
+    "title": "Dove ricevo",
+    "intro": "A Milano, vicino a Pasteur e Rovereto (zona NoLo e Turro), oppure online da dove preferisci."
+  },
+  "faq": { "title": "Domande frequenti" },
+  "blog": { "title": "Dal blog" },
+  "ctaFinale": {
+    "title": "Se senti che è il momento, iniziamo da qui",
+    "text": "Un primo colloquio è un incontro per conoscerci, senza impegno. Scrivimi e ti rispondo.",
+    "button": "Richiedi un primo colloquio"
+  }
+}

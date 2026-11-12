@@ -1,0 +1,180 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Card from '../components/Card.astro';
+import Button from '../components/Button.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import Portrait from '../components/Portrait.astro';
+import StudioMap from '../components/StudioMap.astro';
+import FaqList from '../components/FaqList.astro';
+import home from '../data/home.json';
+import { site } from '../data/site';
+import { professionalServiceLd, faqLd, plain, formatDate, OG_DEFAULT } from '../lib/seo';
+
+const temi = (await getCollection('temi', (e) => !e.data.draft)).sort((a, b) => a.data.order - b.data.order);
+const servizi = (await getCollection('servizi', (e) => !e.data.draft)).sort((a, b) => a.data.order - b.data.order);
+const faqs = (await getCollection('faq', (e) => e.data.showOnHome)).sort((a, b) => a.data.order - b.data.order);
+const posts = (await getCollection('blog', (e) => !e.data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const jsonLd = [
+  professionalServiceLd(temi.map((t) => t.data.title)),
+  ...(faqs.length ? [faqLd(faqs.map((f) => ({ q: f.data.question, a: plain(f.body) })))] : []),
+];
+---
+<BaseLayout
+  title="Psicologa a Milano (Pasteur) e online | Dott.ssa Chiara Guzzone"
+  description="Psicologa e consulente sessuale a Milano (zona Pasteur) e online. Sostegno psicologico individuale e di coppia su ansia, relazioni, sessualità e affettività."
+  ogImage={OG_DEFAULT}
+  jsonLd={jsonLd}
+>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-head stack">
+        <p class="eyebrow">{site.role}</p>
+        <h1>{home.hero.heading}</h1>
+        <p class="hero-lead">{home.hero.title}</p>
+      </div>
+      <Portrait class="hero-photo" ratio="4 / 3" loading="eager" sizes="(min-width: 56rem) 460px, 100vw" />
+      <div class="hero-body stack-lg">
+        <p class="lead">{home.hero.subtitle}</p>
+        <div class="cta-row">
+          <Button href="/contatti">{home.hero.ctaPrimary}</Button>
+          <WhatsAppButton label={home.hero.ctaSecondary} />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section id="riconosci" title={home.riconosci.title} intro={home.riconosci.intro} variant="alt">
+    <ul class="riconosci">
+      {home.riconosci.items.map((item) => <li>{item}</li>)}
+    </ul>
+  </Section>
+
+  <Section id="temi" title="Di cosa mi occupo">
+    <div class="grid grid--3">
+      {temi.map((t) => (
+        <Card title={t.data.title} href={`/di-cosa-mi-occupo/${t.id}`}>{t.data.excerpt}</Card>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="servizi" title="Come posso aiutarti" variant="sage">
+    <div class="grid grid--3">
+      {servizi.map((s) => (
+        <Card title={s.data.title} href={`/servizi/${s.id}`} tag={s.data.forWhom}>{s.data.excerpt}</Card>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="approccio" title={home.approccio.title} intro={home.approccio.intro} variant="alt">
+    <div class="approccio">
+      <div class="main-approach">
+        <h3>{home.approccio.costruttivista.title}</h3>
+        <p>{home.approccio.costruttivista.text}</p>
+      </div>
+      <div class="second-approach">
+        <h3>{home.approccio.cbt.title}</h3>
+        <p>{home.approccio.cbt.text}</p>
+      </div>
+    </div>
+    <ol class="passi">
+      {home.approccio.passi.map((p) => (
+        <li><h3>{p.title}</h3><p>{p.text}</p></li>
+      ))}
+    </ol>
+  </Section>
+
+  <Section id="chi-sono" variant="alt">
+    <div class="teaser">
+      <Portrait ratio="1 / 1" class="teaser-photo" sizes="16rem" />
+      <div class="stack">
+        <h2>{home.chiSonoTeaser.title}</h2>
+        <p>{home.chiSonoTeaser.text}</p>
+        <p class="muted">{site.albo}</p>
+        <Button href="/chi-sono" variant="secondary">Scopri di più su di me</Button>
+      </div>
+    </div>
+  </Section>
+
+  <Section id="studi" title={home.studi.title} intro={home.studi.intro}>
+    <StudioMap />
+  </Section>
+
+  {faqs.length > 0 && (
+    <Section id="faq" title={home.faq.title} variant="alt">
+      <FaqList items={faqs} />
+      <p style="margin-top: var(--space-5)"><a href="/faq">Tutte le domande frequenti →</a></p>
+    </Section>
+  )}
+
+  {posts.length > 0 && (
+    <Section id="blog" title={home.blog.title}>
+      <div class="grid grid--3">
+        {posts.map((p) => (
+          <Card title={p.data.title} href={`/blog/${p.id}`} tag={formatDate(p.data.pubDate)} cta="Leggi l'articolo">{p.data.description}</Card>
+        ))}
+      </div>
+      <p style="margin-top: var(--space-5)"><a href="/blog">Tutti gli articoli →</a></p>
+    </Section>
+  )}
+
+  <Section id="contatto" variant="sage" narrow>
+    <div class="final stack">
+      <h2>{home.ctaFinale.title}</h2>
+      <p class="lead">{home.ctaFinale.text}</p>
+      <div class="cta-row">
+        <Button href="/contatti">{home.ctaFinale.button}</Button>
+        <WhatsAppButton />
+      </div>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .hero { padding-block: var(--space-7) var(--space-7); }
+  .hero-grid { display: grid; gap: var(--space-5); grid-template-columns: 1fr; grid-template-areas: 'head' 'photo' 'body'; }
+  .hero-head { grid-area: head; }
+  .hero-lead { font-family: var(--font-heading); font-size: var(--text-xl); line-height: 1.3; max-width: 32ch; }
+  .hero-grid :global(.hero-photo) { grid-area: photo; max-height: 360px; max-width: 460px; justify-self: start; }
+  .hero-body { grid-area: body; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  @media (max-width: 30rem) { .cta-row :global(.btn) { width: 100%; } }
+  @media (min-width: 56rem) {
+    .hero { padding-block: var(--space-8) var(--space-8); }
+    .hero-grid {
+      grid-template-columns: 1fr minmax(0, 460px); column-gap: var(--space-8); row-gap: var(--space-5);
+      grid-template-rows: auto auto; grid-template-areas: 'head photo' 'body photo'; align-items: center;
+    }
+    .hero-lead { font-size: clamp(1.5rem, 1.1rem + 1.1vw, 1.875rem); }
+    .hero-grid :global(.hero-photo) { aspect-ratio: 4 / 5 !important; max-height: none; justify-self: end; align-self: center; }
+    .hero-head { align-self: end; }
+    .hero-body { align-self: start; }
+  }
+  .riconosci { list-style: none; padding: 0; display: grid; gap: var(--space-3); grid-template-columns: 1fr; }
+  @media (min-width: 40rem) { .riconosci { grid-template-columns: repeat(2, 1fr); } }
+  .riconosci li {
+    padding: var(--space-4) var(--space-5); background: var(--color-surface);
+    border-left: 4px solid var(--color-sage); border-radius: var(--radius-sm);
+  }
+  .approccio { display: grid; gap: var(--space-5); grid-template-columns: 1fr; align-items: start; }
+  @media (min-width: 48rem) { .approccio { grid-template-columns: 1.6fr 1fr; } }
+  .main-approach {
+    padding: var(--space-6); background: var(--color-sage-soft); border-radius: var(--radius-lg);
+    font-size: var(--text-lg);
+  }
+  .second-approach { padding: var(--space-4) var(--space-5); border: 1px solid var(--color-border); border-radius: var(--radius); font-size: var(--text-sm); color: var(--color-text-muted); }
+  .second-approach h3 { font-size: var(--text-lg); }
+  .passi { list-style: none; padding: 0; margin-top: var(--space-7); display: grid; gap: var(--space-5); grid-template-columns: 1fr; counter-reset: passo; }
+  @media (min-width: 48rem) { .passi { grid-template-columns: repeat(3, 1fr); } }
+  .passi li { counter-increment: passo; padding-top: var(--space-3); border-top: 2px solid var(--color-sage); }
+  .passi li::before { content: counter(passo); display: block; font-family: var(--font-heading); font-size: var(--text-2xl); color: var(--color-sage-dark); }
+  .teaser { display: grid; gap: var(--space-6); grid-template-columns: 1fr; align-items: center; }
+  .teaser :global(.teaser-photo) { max-width: 16rem; }
+  @media (min-width: 48rem) { .teaser { grid-template-columns: 16rem 1fr; gap: var(--space-8); } }
+  .final { text-align: center; }
+  .final .cta-row { justify-content: center; }
+</style>

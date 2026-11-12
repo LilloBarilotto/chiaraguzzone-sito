@@ -1,0 +1,69 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaBox from '../../components/CtaBox.astro';
+import { pageTitle, breadcrumbLd, SITE_URL, personLd, OG_DEFAULT } from '../../lib/seo';
+
+export async function getStaticPaths() {
+  const servizi = await getCollection('servizi', (e) => !e.data.draft);
+  const temi = (await getCollection('temi', (e) => !e.data.draft)).sort((a, b) => a.data.order - b.data.order);
+  return servizi.map((entry) => ({ params: { id: entry.id }, props: { entry, temi } }));
+}
+const { entry, temi } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const path = `/servizi/${entry.id}`;
+const labels = { studio: 'In studio a Milano', online: 'Online' } as const;
+const jsonLd = [
+  breadcrumbLd([{ name: 'Home', path: '/' }, { name: 'Servizi', path: '/servizi' }, { name: d.title, path }]),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: d.title,
+    description: d.description,
+    url: `${SITE_URL}${path}`,
+    areaServed: 'Milano',
+    audience: { '@type': 'Audience', audienceType: d.forWhom },
+    provider: personLd,
+  },
+];
+---
+<BaseLayout title={pageTitle(d.seoTitle ?? d.title)} description={d.description} ogImage={OG_DEFAULT} jsonLd={jsonLd}>
+  <article class="section">
+    <div class="container detail">
+      <div class="main">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="/servizi">← Tutti i servizi</a></nav>
+        <h1>{d.title}</h1>
+        <p class="lead">{d.excerpt}</p>
+        <div class="prose"><Content /></div>
+      </div>
+      <aside class="side stack">
+        <div class="box">
+          <h2>Per chi</h2>
+          <p>{d.forWhom}</p>
+          <h2>Modalità</h2>
+          <ul>{d.modalita.map((m) => <li>{labels[m]}</li>)}</ul>
+        </div>
+        {temi.length > 0 && (
+          <div class="box">
+            <h2>Temi correlati</h2>
+            <ul>{temi.map((t) => <li><a href={`/di-cosa-mi-occupo/${t.id}`}>{t.data.title}</a></li>)}</ul>
+          </div>
+        )}
+      </aside>
+    </div>
+    <div class="container container--narrow"><CtaBox /></div>
+  </article>
+</BaseLayout>
+<style>
+  .detail { display: grid; gap: var(--space-7); grid-template-columns: 1fr; }
+  .main { min-width: 0; }
+  .crumbs { margin-bottom: var(--space-4); font-size: var(--text-sm); }
+  .main h1 { margin-bottom: var(--space-4); }
+  .main .prose { margin-top: var(--space-6); }
+  .box { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-5); }
+  .box h2 { font-size: var(--text-lg); margin: 0 0 var(--space-2); }
+  .box h2:not(:first-child) { margin-top: var(--space-4); }
+  .box ul { padding-left: 1.2rem; }
+  @media (min-width: 56rem) { .detail { grid-template-columns: 1fr 18rem; gap: var(--space-8); align-items: start; } }
+</style>

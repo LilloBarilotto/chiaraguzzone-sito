@@ -1,0 +1,28 @@
+---
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  intro?: string;
+  variant?: 'default' | 'alt' | 'sage';
+  narrow?: boolean;
+  id?: string;
+  class?: string;
+}
+const { eyebrow, title, intro, variant = 'default', narrow = false, id, class: className = '' } = Astro.props;
+const headingId = id && title ? `${id}-title` : undefined;
+---
+<section id={id} class:list={['section', { 'section--alt': variant === 'alt', 'section--sage': variant === 'sage' }, className]} aria-labelledby={headingId}>
+  <div class:list={['container', { 'container--narrow': narrow }]}>
+    {(eyebrow || title || intro) && (
+      <header class="section-head stack">
+        {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+        {title && <h2 id={headingId}>{title}</h2>}
+        {intro && <p class="lead">{intro}</p>}
+      </header>
+    )}
+    <slot />
+  </div>
+</section>
+<style>
+  .section-head { margin-bottom: var(--space-7); }
+</style>

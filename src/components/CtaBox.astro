@@ -1,0 +1,27 @@
+---
+import Button from './Button.astro';
+import WhatsAppButton from './WhatsAppButton.astro';
+interface Props { title?: string; text?: string; button?: string; }
+const {
+  title = 'Vuoi parlarne insieme?',
+  text = 'Scrivimi per un primo colloquio: ti rispondo appena possibile.',
+  button = 'Richiedi un primo colloquio',
+} = Astro.props;
+---
+<aside class="cta-box">
+  <h2>{title}</h2>
+  <p>{text}</p>
+  <div class="cta-row">
+    <Button href="/contatti">{button}</Button>
+    <WhatsAppButton />
+  </div>
+</aside>
+<style>
+  .cta-box {
+    margin-top: var(--space-8); padding: var(--space-6);
+    background: var(--color-sage-soft); border-radius: var(--radius-lg);
+  }
+  .cta-box h2 { font-size: var(--text-2xl); margin: 0 0 var(--space-2); }
+  .cta-row { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+  @media (max-width: 30rem) { .cta-row :global(.btn) { width: 100%; } }
+</style>

@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import ProseLayout from '../layouts/ProseLayout.astro';
+import FaqList from '../components/FaqList.astro';
+import CtaBox from '../components/CtaBox.astro';
+import { faqLd, plain, breadcrumbLd, pageTitle } from '../lib/seo';
+
+const faqs = (await getCollection('faq')).sort((a, b) => a.data.order - b.data.order);
+const jsonLd = [
+  ...(faqs.length ? [faqLd(faqs.map((f) => ({ q: f.data.question, a: plain(f.body) })))] : []),
+  breadcrumbLd([{ name: 'Home', path: '/' }, { name: 'Domande frequenti', path: '/faq' }]),
+];
+---
+<ProseLayout
+  title="Domande frequenti"
+  intro="Le risposte alle domande che mi vengono fatte più spesso prima di un primo colloquio."
+  seoTitle={pageTitle('Domande frequenti')}
+  description="Domande frequenti sul primo colloquio, sulle modalità in studio e online, sulla privacy e sul percorso con la psicologa Chiara Guzzone a Milano."
+  jsonLd={jsonLd}
+>
+  <FaqList items={faqs} />
+  <CtaBox title="Hai un'altra domanda?" text="Scrivimi: sarò felice di risponderti prima del primo colloquio." button="Scrivimi" />
+</ProseLayout>

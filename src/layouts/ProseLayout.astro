@@ -1,0 +1,32 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;       // <h1>
+  intro?: string;      // paragrafo introduttivo
+  seoTitle?: string;   // <title>, default: `${title} | Chiara Guzzone`
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  noindex?: boolean;
+  jsonLd?: object | object[];
+}
+
+const { title, intro, seoTitle, description, ...rest } = Astro.props;
+---
+<BaseLayout title={seoTitle ?? `${title} | Chiara Guzzone`} description={description} {...rest}>
+  <article class="section">
+    <div class="container container--narrow">
+      <header class="head stack">
+        <h1>{title}</h1>
+        {intro && <p class="lead">{intro}</p>}
+      </header>
+      <div class="prose">
+        <slot />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+<style>
+  .head { margin-bottom: var(--space-7); }
+</style>

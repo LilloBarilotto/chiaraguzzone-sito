@@ -1,0 +1,33 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # "false" = anteprima non indicizzata. Al lancio impostare "true".
+  PUBLIC_INDEXABLE = "false"
+
+# ANTEPRIMA: blocca l'indicizzazione a livello di header HTTP.
+# AL LANCIO: eliminare questo intero blocco [[headers]] e impostare PUBLIC_INDEXABLE = "true".
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# Header di sicurezza per tutto il sito (restano anche dopo il lancio).
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+
+# La CSP del sito pubblico è in un <meta> in BaseLayout.astro (gli header di regole diverse su Netlify si sommano).
+# Il CMS (/admin) carica Sveltia da unpkg e parla con GitHub/Netlify: CSP dedicata.
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://unpkg.com; img-src 'self' data: blob: https://*.githubusercontent.com https://avatars.githubusercontent.com; font-src 'self' data: https://unpkg.com; connect-src 'self' blob: data: https://api.github.com https://api.netlify.com https://*.githubusercontent.com https://unpkg.com; frame-src 'self' https://api.netlify.com https://github.com; worker-src 'self' blob:; form-action 'self' https://github.com https://api.netlify.com; base-uri 'self'; object-src 'none'; frame-ancestors 'none'"
+    Cache-Control = "no-store"

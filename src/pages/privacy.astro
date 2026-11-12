@@ -1,0 +1,12 @@
+---
+import ProseLayout from '../layouts/ProseLayout.astro';
+import { Content } from '../content-pages/privacy.md';
+import { pageTitle } from '../lib/seo';
+---
+<ProseLayout
+  title="Informativa sulla privacy"
+  seoTitle={pageTitle('Privacy')}
+  description="Informativa sul trattamento dei dati personali del sito della Dott.ssa Chiara Guzzone, psicologa a Milano."
+>
+  <Content />
+</ProseLayout>

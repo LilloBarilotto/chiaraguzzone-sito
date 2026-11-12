@@ -1,0 +1,59 @@
+---
+import { site, whatsappUrl } from '../data/site';
+const year = new Date().getFullYear();
+const hasInstagram = Boolean(site.instagram.url);
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="cols">
+      <div class="col">
+        <p class="foot-title">{site.title}</p>
+        <p>{site.role}</p>
+        <p class="small">{site.albo}</p>
+        <p class="small">P.IVA {site.piva}</p>
+      </div>
+
+      <div class="col">
+        <p class="foot-title">Studi</p>
+        {site.studios.map((s) => (
+          <address>
+            <strong>{s.name}</strong><br />
+            {s.street}, {s.postalCode} {s.city}<br />
+            <span class="small">{s.note}</span>
+          </address>
+        ))}
+        {site.online && <p>Colloqui online</p>}
+      </div>
+
+      <div class="col">
+        <p class="foot-title">Contatti</p>
+        <ul class="plain">
+          <li><a href={site.phoneHref}>{site.phone}</a></li>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li><a href={whatsappUrl()} target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+          {hasInstagram && <li><a href={site.instagram.url} rel="noopener noreferrer">Instagram {site.instagram.handle}</a></li>}
+        </ul>
+      </div>
+    </div>
+
+    <p class="disclaimer">Le informazioni presenti su questo sito non sostituiscono una consulenza professionale.</p>
+    <p class="small bottom">
+      © {year} {site.title} · <a href="/privacy">Privacy</a> · <a href="/privacy#cookie" data-cookie-prefs>Preferenze cookie</a>
+    </p>
+  </div>
+</footer>
+<style>
+  .site-footer { background: var(--color-sage-darker); color: #eef2ec; padding-block: var(--space-8) calc(var(--space-6) + var(--bottom-safe)); font-size: var(--text-sm); }
+  .site-footer a { color: #fff; }
+  .site-footer a:hover { color: #fff; }
+  .cols { display: grid; gap: var(--space-6); grid-template-columns: 1fr; }
+  @media (min-width: 52rem) { .cols { grid-template-columns: repeat(3, 1fr); gap: var(--space-7); } }
+  .foot-title { font-family: var(--font-heading); font-size: var(--text-lg); color: #fff; margin-bottom: var(--space-3); }
+  .col > * + * { margin-top: var(--space-3); }
+  address { font-style: normal; }
+  .small { opacity: 0.85; font-size: 0.8125rem; }
+  .plain { list-style: none; padding: 0; display: grid; gap: var(--space-2); }
+  .disclaimer { margin-top: var(--space-7); padding-top: var(--space-5); border-top: 1px solid rgb(255 255 255 / 0.2); }
+  .bottom { margin-top: var(--space-3); }
+  @media (min-width: 48rem) { .site-footer { padding-bottom: var(--space-6); } }
+</style>

@@ -1,0 +1,58 @@
+:root {
+  /* Colori */
+  --color-bg: #faf7f2;
+  --color-bg-alt: #f1ebe1;
+  --color-surface: #ffffff;
+  --color-text: #2e2a27;
+  --color-text-muted: #5f5851; /* AA su bg e bg-alt */
+  --color-border: #ded5c7;
+  --color-border-strong: #8c8272; /* bordi di campi (>=3:1) */
+
+  --color-sage: #6f8a72;       /* decorativo, sfondi */
+  --color-sage-soft: #e4ebe3;
+  --color-sage-dark: #46604b;  /* testo/link su chiaro, AA */
+  --color-sage-darker: #354a39;
+
+  --color-cta: #b4583f;        /* testo bianco AA (4.7:1) */
+  --color-cta-hover: #9a4731;
+  --color-focus: #2f5d8a;
+
+  /* Tipografia */
+  --font-heading: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --text-sm: clamp(0.875rem, 0.85rem + 0.1vw, 0.9375rem);
+  --text-base: 1.0625rem;
+  --text-lg: clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem);
+  --text-xl: clamp(1.3rem, 1.2rem + 0.5vw, 1.5rem);
+  --text-2xl: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+  --text-3xl: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+  --text-4xl: clamp(2.25rem, 1.6rem + 2.2vw, 3.25rem);
+
+  --leading-body: 1.65;
+  --leading-heading: 1.15;
+
+  /* Spaziatura */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 6.5rem;
+  --section-y: clamp(3.5rem, 2.5rem + 5vw, 7rem);
+  --gutter: clamp(1.25rem, 1rem + 2vw, 2rem);
+
+  /* Layout */
+  --container: 72rem;
+  --container-narrow: 46rem;
+  --radius-sm: 0.5rem;
+  --radius: 1rem;
+  --radius-lg: 1.75rem;
+  --shadow-sm: 0 1px 2px rgb(46 42 39 / 0.06), 0 2px 8px rgb(46 42 39 / 0.05);
+  --shadow: 0 8px 30px rgb(46 42 39 / 0.08);
+  --header-h: 4.25rem;
+  --bottom-safe: 4.5rem; /* spazio in fondo al footer: bottone Contattami e badge Netlify non coprono i link */
+}

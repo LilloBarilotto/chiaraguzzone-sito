@@ -1,0 +1,31 @@
+---
+interface Props {
+  title: string;
+  href?: string;
+  /** Testo del link, mostrato solo se href è presente */
+  cta?: string;
+  tag?: string;
+}
+const { title, href, cta = 'Scopri di più', tag } = Astro.props;
+const Tag = href ? 'a' : 'div';
+---
+<Tag class="card" href={href}>
+  {tag && <span class="card-tag">{tag}</span>}
+  <h3>{title}</h3>
+  <div class="card-body"><slot /></div>
+  {href && <span class="card-cta">{cta} <span aria-hidden="true">→</span></span>}
+</Tag>
+<style>
+  .card {
+    display: flex; flex-direction: column; gap: var(--space-3);
+    padding: var(--space-6); background: var(--color-surface);
+    border: 1px solid var(--color-border); border-radius: var(--radius);
+    color: var(--color-text); text-decoration: none;
+    transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+  }
+  a.card:hover { box-shadow: var(--shadow); transform: translateY(-2px); border-color: var(--color-sage); color: var(--color-text); }
+  .card-tag { font-size: var(--text-sm); color: var(--color-sage-dark); font-weight: 600; }
+  .card-body { color: var(--color-text-muted); }
+  .card-cta { margin-top: auto; padding-top: var(--space-2); color: var(--color-sage-dark); font-weight: 600; }
+  @media (prefers-reduced-motion: reduce) { a.card:hover { transform: none; } }
+</style>

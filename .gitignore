@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.astro/
+.netlify/
+.env
+.env.*
+!.env.example
+.DS_Store
+
+# editor / OS
+.vscode/
+.idea/
+*.log
+Thumbs.db
+
+# documenti interni: stanno nel repo privato, clonato in interno/
+interno/
+CLAUDE.md
+.claude/

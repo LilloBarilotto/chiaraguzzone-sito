@@ -1,0 +1,24 @@
+---
+import { render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+interface Props { items: CollectionEntry<'faq'>[]; }
+const { items } = Astro.props;
+const rendered = await Promise.all(items.map(async (e) => ({ e, Content: (await render(e)).Content })));
+---
+<div class="faq">
+  {rendered.map(({ e, Content }) => (
+    <details>
+      <summary>{e.data.question}</summary>
+      <div class="answer prose"><Content /></div>
+    </details>
+  ))}
+</div>
+<style>
+  .faq { display: grid; gap: var(--space-3); max-width: var(--container-narrow); }
+  details { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); }
+  summary { cursor: pointer; padding: var(--space-4) var(--space-5); font-weight: 600; list-style: none; min-height: 3rem; display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '+'; font-size: 1.5rem; color: var(--color-sage-dark); flex-shrink: 0; }
+  details[open] summary::after { content: '−'; }
+  .answer { padding: 0 var(--space-5) var(--space-5); font-size: var(--text-base); }
+</style>

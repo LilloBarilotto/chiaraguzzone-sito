@@ -1,0 +1,24 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import Card from '../../components/Card.astro';
+import CtaBox from '../../components/CtaBox.astro';
+import { pageTitle, breadcrumbLd } from '../../lib/seo';
+
+const servizi = (await getCollection('servizi', (e) => !e.data.draft)).sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout
+  title={pageTitle('Servizi')}
+  description="Sostegno psicologico individuale e di coppia, consulenza sessuale e colloqui online con la psicologa Chiara Guzzone a Milano."
+  jsonLd={breadcrumbLd([{ name: 'Home', path: '/' }, { name: 'Servizi', path: '/servizi' }])}
+>
+  <Section title="Servizi" intro="Percorsi in studio a Milano o online, per adolescenti, giovani, adulti e coppie.">
+    <div class="grid grid--3">
+      {servizi.map((s) => (
+        <Card title={s.data.title} href={`/servizi/${s.id}`} tag={s.data.forWhom}>{s.data.excerpt}</Card>
+      ))}
+    </div>
+    <div class="container--narrow"><CtaBox /></div>
+  </Section>
+</BaseLayout>

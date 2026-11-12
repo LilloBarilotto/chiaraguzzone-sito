@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import { pageTitle, breadcrumbLd, formatDate } from '../../lib/seo';
+
+const posts = (await getCollection('blog', (e) => !e.data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+<BaseLayout
+  title={pageTitle('Blog')}
+  description="Articoli di psicologia, relazioni, sessualità e benessere emotivo a cura della psicologa Chiara Guzzone, a Milano e online."
+  jsonLd={breadcrumbLd([{ name: 'Home', path: '/' }, { name: 'Blog', path: '/blog' }])}
+>
+  <Section title="Blog" intro="Approfondimenti su ansia, relazioni, sessualità e benessere emotivo.">
+    {posts.length === 0 && <p>I primi articoli arriveranno presto.</p>}
+    <div class="grid grid--3">
+      {posts.map((p) => (
+        <a class="post" href={`/blog/${p.id}`}>
+          <time datetime={p.data.pubDate.toISOString()}>{formatDate(p.data.pubDate)}</time>
+          <h2>{p.data.title}</h2>
+          <p>{p.data.description}</p>
+          {p.data.tags.length > 0 && (
+            <ul class="tags">{p.data.tags.map((t) => <li>{t}</li>)}</ul>
+          )}
+          <span class="more">Leggi l'articolo <span aria-hidden="true">→</span></span>
+        </a>
+      ))}
+    </div>
+  </Section>
+</BaseLayout>
+<style>
+  .post {
+    display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-6);
+    background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius);
+    color: var(--color-text); text-decoration: none; transition: box-shadow 0.2s, border-color 0.2s;
+  }
+  .post:hover { box-shadow: var(--shadow); border-color: var(--color-sage); color: var(--color-text); }
+  .post time { font-size: var(--text-sm); color: var(--color-text-muted); }
+  .post h2 { font-size: var(--text-xl); margin: 0; }
+  .post p { color: var(--color-text-muted); }
+  .tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .tags li { font-size: var(--text-sm); padding: 0.1rem 0.7rem; border-radius: 999px; background: var(--color-sage-soft); color: var(--color-sage-darker); }
+  .more { margin-top: auto; font-weight: 600; color: var(--color-sage-dark); }
+</style>

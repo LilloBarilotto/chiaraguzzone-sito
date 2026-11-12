@@ -1,0 +1,66 @@
+---
+---
+<div id="cookie-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Preferenze cookie" tabindex="-1" hidden>
+  <button type="button" class="cb-close" data-cb="close" aria-label="Chiudi e rifiuta i cookie">
+    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.5" fill="none" /></svg>
+  </button>
+  <p class="cb-text">
+    La mappa è di Google e può usare propri cookie: la mostro solo se accetti. Nessun cookie di profilazione.{" "}
+    <a href="/privacy#cookie">Dettagli</a>
+  </p>
+  <div class="cb-actions">
+    <button type="button" class="btn btn--secondary" data-cb="reject">Rifiuta</button>
+    <button type="button" class="btn btn--secondary" data-cb="accept">Accetta</button>
+  </div>
+</div>
+
+<script>
+  import { getConsent, setConsent, CONSENT_OPEN_EVENT } from '../lib/consent';
+
+  const banner = document.getElementById('cookie-banner') as HTMLElement | null;
+  if (banner) {
+    const show = (focus: boolean) => {
+      banner.hidden = false;
+      if (focus) banner.focus();
+    };
+    const hide = () => { banner.hidden = true; };
+
+    banner.querySelector('[data-cb="accept"]')?.addEventListener('click', () => { setConsent(true); hide(); });
+    banner.querySelector('[data-cb="reject"]')?.addEventListener('click', () => { setConsent(false); hide(); });
+    banner.querySelector('[data-cb="close"]')?.addEventListener('click', () => { setConsent(false); hide(); });
+
+    window.addEventListener(CONSENT_OPEN_EVENT, () => show(true));
+    document.querySelectorAll('[data-cookie-prefs]').forEach((el) =>
+      el.addEventListener('click', (e) => { e.preventDefault(); show(true); }),
+    );
+
+    // Il banner compare da solo solo nelle pagine con la mappa (unica fonte di cookie); altrove si apre dal footer.
+    if (getConsent() === null && document.querySelector('[data-map]')) show(false);
+  }
+</script>
+
+<style>
+  .cookie-banner {
+    position: fixed; z-index: 60;
+    left: 0.75rem; right: 0.75rem;
+    bottom: calc(0.75rem + env(safe-area-inset-bottom));
+    max-width: 26rem; padding: var(--space-4) var(--space-4) var(--space-4);
+    background: var(--color-surface); color: var(--color-text);
+    border: 1px solid var(--color-border); border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    font-size: var(--text-sm); line-height: 1.5;
+  }
+  .cookie-banner[hidden] { display: none; }
+  .cb-text { padding-right: 1.75rem; }
+  .cb-text a { color: var(--color-sage-dark); }
+  .cb-actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-top: var(--space-3); }
+  .cb-actions .btn { min-height: 2.5rem; padding: 0.4rem 1rem; width: 100%; font-size: var(--text-sm); }
+  .cb-close {
+    position: absolute; top: 0.25rem; right: 0.25rem; width: 2.5rem; height: 2.5rem;
+    display: grid; place-items: center; background: none; border: 0; border-radius: 50%; cursor: pointer; color: var(--color-text-muted);
+  }
+  .cb-close:hover { color: var(--color-text); background: var(--color-bg-alt); }
+  @media (min-width: 48rem) {
+    .cookie-banner { left: 1.25rem; right: auto; bottom: 1.25rem; padding: var(--space-5); }
+  }
+</style>

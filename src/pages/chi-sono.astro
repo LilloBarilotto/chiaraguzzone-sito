@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Portrait from '../components/Portrait.astro';
+import CtaBox from '../components/CtaBox.astro';
+import { Content } from '../content-pages/chi-sono.md';
+import { site } from '../data/site';
+import { personLd, pageTitle, OG_DEFAULT, SITE_URL } from '../lib/seo';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  ...personLd,
+  description: 'Psicologa e consulente sessuale a Milano e online.',
+  worksFor: { '@id': `${SITE_URL}/#studio` },
+};
+---
+<BaseLayout
+  title={pageTitle('Chi sono')}
+  description="Chi è la Dott.ssa Chiara Guzzone: psicologa e consulente sessuale a Milano e online, approccio cognitivo costruttivista, iscritta all'Albo della Lombardia."
+  ogImage={OG_DEFAULT}
+  jsonLd={jsonLd}
+>
+  <article class="section">
+    <div class="container about">
+      <aside class="side">
+        <Portrait ratio="4 / 5" sizes="360px" loading="eager" />
+        <p class="muted albo">{site.albo}</p>
+      </aside>
+      <div class="main">
+        <h1>Chi sono</h1>
+        <div class="prose"><Content /></div>
+        <CtaBox />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+<style>
+  .about { display: grid; gap: var(--space-7); grid-template-columns: 1fr; }
+  .side { max-width: 22.5rem; width: 100%; }
+  .albo { margin-top: var(--space-3); font-size: var(--text-sm); }
+  .main { min-width: 0; }
+  .main h1 { margin-bottom: var(--space-6); }
+  @media (min-width: 56rem) {
+    .about { grid-template-columns: 22.5rem 1fr; gap: var(--space-8); align-items: start; }
+  }
+</style>

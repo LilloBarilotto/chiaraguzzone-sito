@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import StudioMap from '../components/StudioMap.astro';
+import { site } from '../data/site';
+import { pageTitle, breadcrumbLd, OG_DEFAULT } from '../lib/seo';
+---
+<BaseLayout
+  title={pageTitle('Contatti')}
+  description="Contatta la psicologa Chiara Guzzone per un primo colloquio a Milano (Pasteur, Carducci) o online: telefono, WhatsApp, email o modulo di richiesta."
+  ogImage={OG_DEFAULT}
+  jsonLd={breadcrumbLd([{ name: 'Home', path: '/' }, { name: 'Contatti', path: '/contatti' }])}
+>
+  <Section title="Contatti" intro="Scrivimi per richiedere un primo colloquio o per avere qualche informazione in più: ti rispondo appena possibile. Scegli il canale che preferisci.">
+    <div class="layout">
+      <div class="methods stack">
+        <h2>Scrivimi o chiamami</h2>
+        <ul class="list">
+          <li><span class="muted">Telefono</span><a href={site.phoneHref}>{site.phone}</a></li>
+          <li><span class="muted">Email</span><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        </ul>
+        <WhatsAppButton />
+      </div>
+
+      <form class="form stack-lg" name="contatto" method="POST" action="/grazie" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="contatto" />
+        <p class="hp" aria-hidden="true"><label>Non compilare questo campo <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+        <h2>Richiedi un primo colloquio</h2>
+
+        <div>
+          <label for="nome">Nome <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="nome" name="nome" required autocomplete="name" />
+        </div>
+        <div>
+          <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
+          <input type="email" id="email" name="email" required autocomplete="email" />
+        </div>
+        <div>
+          <label for="telefono">Telefono <span class="muted">(facoltativo)</span></label>
+          <input type="tel" id="telefono" name="telefono" autocomplete="tel" />
+        </div>
+        <div>
+          <label for="studio">Studio preferito</label>
+          <select id="studio" name="studio">
+            <option>Indifferente</option>
+            <option>Studio Venini – Pasteur</option>
+            <option>Studio Carducci</option>
+            <option>Online</option>
+          </select>
+        </div>
+        <fieldset>
+          <legend>Come preferisci essere ricontattato/a?</legend>
+          <label class="opt"><input type="radio" name="ricontatto" value="email" checked /> Email</label>
+          <label class="opt"><input type="radio" name="ricontatto" value="telefono" /> Telefono</label>
+          <label class="opt"><input type="radio" name="ricontatto" value="WhatsApp" /> WhatsApp</label>
+        </fieldset>
+        <div>
+          <label for="messaggio">Messaggio <span class="muted">(facoltativo)</span></label>
+          <textarea id="messaggio" name="messaggio" aria-describedby="msg-help"></textarea>
+          <p id="msg-help" class="help muted">Non inserire informazioni sulla tua salute: ne parleremo di persona.</p>
+        </div>
+        <div>
+          <label class="opt check">
+            <input type="checkbox" name="privacy" required />
+            <span>Ho letto l'<a href="/privacy" target="_blank" rel="noopener">informativa sulla privacy</a> e acconsento al trattamento dei miei dati per essere ricontattato/a. <span class="req" aria-hidden="true">*</span></span>
+          </label>
+        </div>
+        <button type="submit" class="btn btn--primary btn--block">Invia la richiesta</button>
+      </form>
+    </div>
+  </Section>
+
+  <Section title="Dove ricevo" variant="alt">
+    <StudioMap />
+  </Section>
+</BaseLayout>
+<style>
+  .layout { display: grid; gap: var(--space-8); grid-template-columns: 1fr; }
+  @media (min-width: 56rem) { .layout { grid-template-columns: 1fr 1.4fr; align-items: start; } }
+  .methods, .form { min-width: 0; }
+  .list { list-style: none; padding: 0; display: grid; gap: var(--space-3); }
+  .list li { display: flex; flex-direction: column; }
+  .list a { font-size: var(--text-lg); font-weight: 600; overflow-wrap: anywhere; padding-block: 0.25rem; }
+  .form { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-6); }
+  .form h2 { font-size: var(--text-2xl); }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .req { color: var(--color-cta-hover); }
+  fieldset { border: 0; padding: 0; margin: 0; }
+  legend { font-weight: 600; margin-bottom: var(--space-2); padding: 0; }
+  .opt { display: flex; align-items: center; gap: var(--space-3); min-height: 2.75rem; font-weight: 400; margin: 0; cursor: pointer; }
+  .opt input { width: 1.4rem; height: 1.4rem; flex-shrink: 0; accent-color: var(--color-sage-dark); }
+  .check { align-items: flex-start; }
+  .check input { margin-top: 0.15rem; }
+  .help { font-size: var(--text-sm); margin-top: var(--space-1); }
+  .form :is(input, select, textarea):user-invalid { border-color: #b3261e; background: #fdf3f2; }
+  .form :is(input, select, textarea) { min-height: 3rem; }
+  .form textarea { min-height: 8rem; }
+  .form .btn { min-height: 3.25rem; cursor: pointer; }
+</style>
