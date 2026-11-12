@@ -5,6 +5,10 @@ import WhatsAppButton from '../components/WhatsAppButton.astro';
 import StudioMap from '../components/StudioMap.astro';
 import { site } from '../data/site';
 import { pageTitle, breadcrumbLd, OG_DEFAULT } from '../lib/seo';
+import { IS_ANTEPRIMA } from '../lib/ambiente';
+
+// Nell'Anteprima il modulo non invia: Netlify raccoglierebbe le richieste insieme a quelle vere.
+const netlifyForm = IS_ANTEPRIMA ? {} : { 'data-netlify': 'true', 'netlify-honeypot': 'bot-field' };
 ---
 <BaseLayout
   title={pageTitle('Contatti')}
@@ -23,7 +27,7 @@ import { pageTitle, breadcrumbLd, OG_DEFAULT } from '../lib/seo';
         <WhatsAppButton />
       </div>
 
-      <form class="form stack-lg" name="contatto" method="POST" action="/grazie" data-netlify="true" netlify-honeypot="bot-field">
+      <form class="form stack-lg" name="contatto" method="POST" action={IS_ANTEPRIMA ? '#' : '/grazie'} {...netlifyForm}>
         <input type="hidden" name="form-name" value="contatto" />
         <p class="hp" aria-hidden="true"><label>Non compilare questo campo <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
         <h2>Richiedi un primo colloquio</h2>
@@ -66,7 +70,9 @@ import { pageTitle, breadcrumbLd, OG_DEFAULT } from '../lib/seo';
             <span>Ho letto l'<a href="/privacy" target="_blank" rel="noopener">informativa sulla privacy</a> e acconsento al trattamento dei miei dati per essere ricontattato/a. <span class="req" aria-hidden="true">*</span></span>
           </label>
         </div>
-        <button type="submit" class="btn btn--primary btn--block">Invia la richiesta</button>
+        {IS_ANTEPRIMA
+          ? <><button type="submit" class="btn btn--primary btn--block" disabled>Invia la richiesta</button><p class="help muted">Nell'anteprima il modulo non invia.</p></>
+          : <button type="submit" class="btn btn--primary btn--block">Invia la richiesta</button>}
       </form>
     </div>
   </Section>
@@ -97,4 +103,5 @@ import { pageTitle, breadcrumbLd, OG_DEFAULT } from '../lib/seo';
   .form :is(input, select, textarea) { min-height: 3rem; }
   .form textarea { min-height: 8rem; }
   .form .btn { min-height: 3.25rem; cursor: pointer; }
+  .form .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 </style>

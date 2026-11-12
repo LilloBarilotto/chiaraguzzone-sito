@@ -40,12 +40,17 @@ git grep --untracked -nIE "(client_secret|BEGIN [A-Z ]*PRIVATE KEY|gh[pousr]_[A-
 grep -q 'integrity="sha384-' public/admin/index.html && ok "SRI sul CMS" || err "manca integrity sullo script Sveltia"
 
 # 8. Dipendenze
-npm audit --omit=dev --audit-level=high >/dev/null 2>&1 && ok "npm audit" || err "vulnerabilità high/critical (npm audit)"
+# In GitHub Actions ("Pubblica il sito") npm audit non blocca la pubblicazione: lo si controlla in locale prima dei commit.
+if [ -n "${CI:-}" ]; then echo "- npm audit saltato (CI)"; else
+  npm audit --omit=dev --audit-level=high >/dev/null 2>&1 && ok "npm audit" || err "vulnerabilità high/critical (npm audit)"
+fi
 
 # 9. Repo pubblico (ADR 0004): niente note interne né documenti interni nei file del repo, commit con email anonima
 files=$(git ls-files --cached --others --exclude-standard)
 echo "$files" | grep -v '^scripts/verify.sh$' | xargs grep -l "DA CONFERMARE" 2>/dev/null | grep -q . && err "note [DA CONFERMARE] nei file del repo: vanno in interno/da-confermare.md" || ok "nessuna nota interna nel repo"
 echo "$files" | grep -qE '^(CLAUDE\.md|GLOSSARY\.md|CONTRACTS\.md|docs/|interno/)' && err "documenti interni nel repo pubblico: $(echo "$files" | grep -E '^(CLAUDE\.md|GLOSSARY\.md|CONTRACTS\.md|docs/|interno/)' | tr '\n' ' ')" || ok "nessun documento interno nel repo"
-git config user.email | grep -q '@users\.noreply\.github\.com$' && ok "email anonima nei commit" || err "git user.email non è l'email anonima di GitHub (…@users.noreply.github.com)"
+if [ -n "${CI:-}" ]; then echo "- email dei commit: saltato (CI)"; else
+  git config user.email | grep -q '@users\.noreply\.github\.com$' && ok "email anonima nei commit" || err "git user.email non è l'email anonima di GitHub (…@users.noreply.github.com)"
+fi
 
 [ $fail -eq 0 ] && echo "Tutto OK" || { echo "Ci sono regole violate"; exit 1; }

@@ -1,0 +1,22 @@
+---
+// Fascia mostrata solo nell'Anteprima (mai sul sito vero): vedi src/lib/ambiente.ts.
+import { PUBBLICA_URL } from '../lib/ambiente';
+---
+<div class="anteprima" role="note">
+  <p>
+    <strong>Anteprima:</strong> queste modifiche non sono ancora sul sito.
+    Quando hai finito, <a href={PUBBLICA_URL} target="_blank" rel="noopener">premi “Pubblica il sito”</a>.
+  </p>
+</div>
+
+<style>
+  .anteprima {
+    background: var(--color-cta);
+    color: #fff;
+    font-size: var(--text-sm);
+    text-align: center;
+    padding: var(--space-2) var(--space-4);
+  }
+  .anteprima p { margin: 0; }
+  .anteprima a { color: #fff; font-weight: 600; text-decoration: underline; }
+</style>

@@ -25,8 +25,9 @@ media_libraries:
           quality: 85
           width: 1600
 
-site_url: https://chiaraguzzone.netlify.app
-display_url: https://chiaraguzzone.netlify.app
+# I link "vedi sul sito" del pannello portano all'Anteprima (branch main): lì si vedono subito le modifiche salvate.
+site_url: https://main--chiaraguzzone.netlify.app
+display_url: https://main--chiaraguzzone.netlify.app
 logo_url: /favicon.svg
 
 collections:
@@ -35,6 +36,7 @@ collections:
     label: Articoli del blog
     label_singular: Articolo
     folder: src/content/blog
+    preview_path: "blog/{{slug}}"
     create: true
     slug: "{{slug}}"
     extension: md
@@ -65,6 +67,7 @@ collections:
     label: Di cosa mi occupo
     label_singular: Tema
     folder: src/content/temi
+    preview_path: "di-cosa-mi-occupo/{{slug}}"
     create: true
     slug: "{{slug}}"
     extension: md
@@ -85,6 +88,7 @@ collections:
     label: Servizi
     label_singular: Servizio
     folder: src/content/servizi
+    preview_path: "servizi/{{slug}}"
     create: true
     slug: "{{slug}}"
     extension: md
@@ -115,6 +119,7 @@ collections:
     label: Domande frequenti
     label_singular: Domanda
     folder: src/content/faq
+    preview_path: "faq"
     create: true
     slug: "{{slug}}"
     extension: md

@@ -1,0 +1,72 @@
+# "Pubblica il sito": porta sul sito vero tutto ciò che è nell'Anteprima.
+# Copia il branch `main` (Anteprima, gratis su Netlify) sul branch `produzione` (sito vero, 15 crediti Netlify a deploy).
+# Si avvia a mano: Actions -> "Pubblica il sito" -> Run workflow. Se non c'è niente di nuovo non fa nulla (e non costa nulla).
+name: Pubblica il sito
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pubblica
+  cancel-in-progress: false
+
+jobs:
+  pubblica:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: C'è qualcosa da pubblicare?
+        id: diff
+        run: |
+          if git rev-parse --verify -q origin/produzione >/dev/null && [ "$(git rev-parse origin/produzione)" = "$(git rev-parse HEAD)" ]; then
+            echo "nuovo=no" >> "$GITHUB_OUTPUT"
+            echo "### Niente da pubblicare" >> "$GITHUB_STEP_SUMMARY"
+            echo "Il sito è già aggiornato con tutte le modifiche salvate. Nessun credito usato." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "nuovo=si" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        if: steps.diff.outputs.nuovo == 'si'
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Controlli (build, deontologia, note interne)
+        if: steps.diff.outputs.nuovo == 'si'
+        run: |
+          npm ci --no-audit --no-fund
+          npm run verify || {
+            echo "### Non pubblicato: i controlli hanno trovato un problema" >> "$GITHUB_STEP_SUMMARY"
+            echo "Il sito non è stato modificato. Scrivi a Lillo con il link di questa pagina." >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          }
+
+      - name: Pubblica (main -> produzione)
+        if: steps.diff.outputs.nuovo == 'si'
+        run: |
+          if git rev-parse --verify -q origin/produzione >/dev/null; then
+            git merge-base --is-ancestor origin/produzione HEAD || {
+              echo "### Non pubblicato: produzione contiene modifiche che main non ha" >> "$GITHUB_STEP_SUMMARY"
+              echo "Serve un intervento manuale. Scrivi a Lillo." >> "$GITHUB_STEP_SUMMARY"
+              exit 1
+            }
+            modifiche=$(git log --format='- %s' origin/produzione..HEAD | head -30)
+          else
+            modifiche="- prima pubblicazione"
+          fi
+          git push origin HEAD:refs/heads/produzione
+          {
+            echo "### Pubblicato"
+            echo "Fra 1-2 minuti le modifiche sono online. Se non le vedi, ricarica la pagina."
+            echo ""
+            echo "$modifiche"
+          } >> "$GITHUB_STEP_SUMMARY"
